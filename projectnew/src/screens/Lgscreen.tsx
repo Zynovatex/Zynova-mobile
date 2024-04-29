@@ -40,6 +40,7 @@ const Lgscreen = (props) => {
         <Text style={{
           fontSize: 20,
           fontWeight: '700'
+          
         }}>
           Do you Have an account?
         </Text>

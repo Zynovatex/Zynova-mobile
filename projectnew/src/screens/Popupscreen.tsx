@@ -1,14 +1,16 @@
-import { StyleSheet, Text, View, Image, Button, TouchableOpacity } from 'react-native';
 import React from 'react';
+import { StyleSheet, Text, View, Image, Button, TouchableWithoutFeedback } from 'react-native';
+import { NavigationProp } from '@react-navigation/native';
 
-const Popupscreen = (props) => {
-    function gotolg() {
-        stack.navigate('B');
+interface Props {
+    navigation: NavigationProp<any>;
+}
+
+const Popupscreen: React.FC<Props> = (props) => {
+    const gotolg = () => {
+        props.navigation.navigate('B');
     }
 
-    const stack = props.navigation;
-
-    // Define styles directly under the component
     const styles = StyleSheet.create({
         container: {
             flex: 1,
@@ -45,11 +47,11 @@ const Popupscreen = (props) => {
                 source={require('../../assets/img/logo.jpg')}
             />
 
-            <TouchableOpacity onPress={gotolg}>
+            <TouchableWithoutFeedback onPress={gotolg}>
                 <View style={styles.buttonContainer}>
-                    <Button title='welcome' />
+                    <Button title='Welcome' onPress={gotolg} />
                 </View>
-            </TouchableOpacity>
+            </TouchableWithoutFeedback>
         </View>
     );
 }

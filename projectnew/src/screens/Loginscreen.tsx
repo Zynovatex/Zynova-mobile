@@ -4,9 +4,14 @@ import { Formik, FormikProps } from 'formik';
 import * as yup from 'yup';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
+
 interface FormValues {
   email: string;
   password: string;
+}
+
+interface Props {
+  navigation: any; // Replace 'any' with actual type for navigation
 }
 
 const validationSchema = yup.object().shape({
@@ -14,9 +19,13 @@ const validationSchema = yup.object().shape({
   password: yup.string().required('Password is required'),
 });
 
-const Loginscreen: React.FC = () => {
+const Loginscreen: React.FC<Props> = (props) => {
+  const stack = props.navigation;
+
   const handleSubmit = (values: FormValues) => {
     console.log(values); // You can perform your login logic here
+    // Redirect to another screen
+    stack.navigate('E');
   };
 
   return (
@@ -53,7 +62,7 @@ const Loginscreen: React.FC = () => {
                 {touched.password && errors.password && <Text style={styles.errorText}>{errors.password}</Text>}
               </View>
               <View style={styles.buttonContainer}>
-              <Button onPress={() => handleSubmit()} title='Log In' />
+                <Button onPress={()=>handleSubmit()} title='Log In' />
               </View>
             </View>
           )}
@@ -81,15 +90,14 @@ const styles = StyleSheet.create({
   },
   inputContainer: {
     marginBottom: 20,
-    
   },
   input: {
     height: 50,
-    borderColor: 'gray',
+    borderColor: 'grey',
     borderWidth: 1,
-    borderRadius: 10,
+    borderRadius: 15,
     paddingLeft: 10,
-    backgroundColor:'white'
+    backgroundColor: 'white'
   },
   errorText: {
     color: 'red',
