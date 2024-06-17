@@ -1,8 +1,8 @@
 import React, { useState , useEffect} from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, TextInput, Image } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, TextInput, Image, Modal } from 'react-native'; // Add Modal
 import { StripeProvider, CardField, useConfirmPayment } from '@stripe/stripe-react-native';
 import axios from 'axios';
-import { useRoute } from '@react-navigation/native';
+import { useRoute, useNavigation } from '@react-navigation/native'; // Add useNavigation
 
 const API_URL = 'http://10.0.2.2:8080/payment/create';
 
@@ -10,12 +10,19 @@ interface RouteParams {
   totalPrice?: number; // Define the structure of route parameters
 }
 
-const Paymentdetails = () => {
+interface Props {
+  navigation: any; // Replace 'any' with actual type for navigation
+}
+
+const Paymentdetails: React.FC<Props> = (props) => {
   const [cardHolderEmail, setCardHolderEmail] = useState('');
   const { confirmPayment } = useConfirmPayment();
-  const [cardDetails, setCardDetails] = useState(null);
-    const [totalPrice, setTotalPrice] = useState(0);
+  const [cardDetails, setCardDetails] = useState<any>(null);
 
+  const [totalPrice, setTotalPrice] = useState(0);
+  const [showSuccessModal, setShowSuccessModal] = useState(false); // Add state for modal
+  const navigation = useNavigation(); // Initialize navigation
+  
   const route = useRoute();
   const { totalPrice: routeTotalPrice } = route.params as RouteParams; // Type assertion
 
@@ -23,7 +30,6 @@ const Paymentdetails = () => {
     if (routeTotalPrice) {
       setTotalPrice(routeTotalPrice);
       console.log("Price =" + routeTotalPrice)
-
     }
   }, [routeTotalPrice]);
 
@@ -59,7 +65,6 @@ const Paymentdetails = () => {
 
       const billingDetails = {
         email: cardHolderEmail,
-
       };
 
       console.log(clientSecret)
@@ -71,10 +76,9 @@ const Paymentdetails = () => {
       });
       if (error) {
         console.error('Error confirming payment:', error);
-       
       } else {
         console.log('Payment confirmed:', paymentIntent);
-        
+        setShowSuccessModal(true); // Show success modal
       }
     } catch (error) {
       console.error('Error handling payment:', error);
@@ -84,6 +88,16 @@ const Paymentdetails = () => {
   const isEmailValid = (email) => {
     return /\S+@\S+\.\S+/.test(email);
   };
+
+  const handleModalOk = () => {
+    setShowSuccessModal(false); // Close modal
+   
+  };
+
+  const pressOk = () => { 
+    const stack = props.navigation;
+    stack.navigate('E');
+  }
 
   return (
     <StripeProvider
@@ -122,6 +136,22 @@ const Paymentdetails = () => {
         <TouchableOpacity onPress={handlePayPress} style={styles.confirmButton}>
           <Text style={styles.confirmButtonText}>Confirm</Text>
         </TouchableOpacity>
+        {/* Success Modal */}
+        <Modal
+          animationType="slide"
+          transparent={true}
+          visible={showSuccessModal}
+          onRequestClose={() => setShowSuccessModal(false)}
+        >
+          <View style={styles.modalContainer}>
+            <View style={styles.modalContent}>
+              <Text style={styles.modalText}>Payment Successful!</Text>
+              <TouchableOpacity onPress={handleModalOk} style={styles.modalButton}>
+                <Text style={styles.modalButtonText} onPress={pressOk}>OK</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </Modal>
       </View>
     </StripeProvider>
   );
@@ -148,7 +178,6 @@ const styles = StyleSheet.create({
     width: 350,
     backgroundColor: '#FFFFFF',
     padding: 10,
-    borderRadius: 10,
     fontSize: 18,
   },
   cardFieldLabel: {
@@ -175,6 +204,32 @@ const styles = StyleSheet.create({
     color: '#000000',
     textAlign: 'center',
     fontWeight: 'bold',
+  },
+  modalContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  },
+  modalContent: {
+    backgroundColor: '#FFFFFF',
+    padding: 20,
+    borderRadius: 10,
+    alignItems: 'center',
+  },
+  modalText: {
+    fontSize: 20,
+    marginBottom: 20,
+  },
+  modalButton: {
+    backgroundColor: '#F6BD0F',
+    padding: 10,
+    borderRadius: 5,
+  },
+  modalButtonText: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: '#000000',
   },
 });
 

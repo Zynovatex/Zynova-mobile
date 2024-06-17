@@ -9,7 +9,8 @@ import Signupscreen from '../src/screens/Signupscreen';
 import Dashboard from '../src/screens/Dashboard';
 import Detail from '../src/screens/Detail';
 import Payment from '../src/screens/Payment';
-
+import Bottomtabnavigation from './Bottomtabnavigation';
+import Orders from '../src/screens/Orders';
 
 const Stack = createStackNavigator();
 
@@ -30,7 +31,9 @@ const Appnavigation = () => {
       <Stack.Screen name='D' component={Signupscreen} />
      <Stack.Screen name='E' component={Dashboard}/>
      <Stack.Screen name='F' component={Detail}/>
+     <Stack.Screen name='K' component={Orders}/>
      <Stack.Screen name='G' component={Payment}/>
+      <Stack.Screen name='H' component={Bottomtabnavigation}/>
     </Stack.Navigator>
 
    </NavigationContainer>

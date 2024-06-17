@@ -1,82 +1,95 @@
 import React from 'react';
 import { Button, Image, Text, TouchableOpacity, View, StyleSheet } from 'react-native';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { RouteProp } from '@react-navigation/native';
 
-const Lgscreen = (props) => {
+type RootStackParamList = {
+  C: undefined;
+  D: undefined;
+};
 
-  function gotologin() {
-    stack.navigate('C');
+type LgscreenNavigationProp = StackNavigationProp<RootStackParamList, 'C'>;
+type LgscreenRouteProp = RouteProp<RootStackParamList, 'C'>;
+
+type LgscreenProps = {
+  navigation: LgscreenNavigationProp;
+  route: LgscreenRouteProp;
+};
+
+const Lgscreen: React.FC<LgscreenProps> = ({ navigation }) => {
+
+  const gotologin = () => {
+    navigation.navigate('C');
   }
 
-  function gotosignup() {
-    stack.navigate('D');
+  const gotosignup = () => {
+    navigation.navigate('D');
   }
-
-  const stack = props.navigation;
 
   return (
-    <View>
-
+    <View style={styles.container}>
       <Image
         style={styles.backgroundImage}
         source={require('../../assets/img/bii.jpg')}
       />
 
-      <TouchableOpacity onPress={gotosignup}>
-        <View style={styles.signUpButtonContainer}>
-          <Button title='Sign Up' />
+      <TouchableOpacity onPress={gotosignup} style={styles.buttonContainer}>
+        <View style={styles.button}>
+          <Text style={styles.buttonText}>Sign Up</Text>
         </View>
       </TouchableOpacity>
 
-      <View style={styles.orTextContainer}>
-        <Text style={{
-          fontSize: 20,
-          fontWeight: '700'
-        }}>
-          Or
-        </Text>
+      <View style={styles.textContainer}>
+        <Text style={styles.text}>Or</Text>
       </View>
 
-      <View style={styles.accountTextContainer}>
-        <Text style={{
-          fontSize: 20,
-          fontWeight: '700'
-          
-        }}>
-          Do you Have an account?
-        </Text>
+      <View style={styles.textContainer}>
+        <Text style={styles.text}>Do you have an account?</Text>
       </View>
 
-      <TouchableOpacity onPress={gotologin}>
-        <View style={styles.logInButtonContainer}>
-          <Button title='Log In' />
+      <TouchableOpacity onPress={gotologin} style={styles.buttonContainer}>
+        <View style={styles.button}>
+          <Text style={styles.buttonText}>Log In</Text>
         </View>
       </TouchableOpacity>
-
     </View>
   );
 }
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
   backgroundImage: {
+    position: 'absolute',
     width: '100%',
-    height: 900,
-    position: 'absolute'
+    height: '100%',
+    zIndex: -1,
   },
-  signUpButtonContainer: {
-    marginHorizontal: 100,
-    marginTop: 400
+  buttonContainer: {
+    marginVertical: 10,
+    width: '40%',
   },
-  orTextContainer: {
-    marginLeft: 200,
-    marginTop: 10,
+  button: {
+    backgroundColor: '#2196F3',
+    paddingVertical: 10,
+    borderRadius: 5,
+    alignItems: 'center',
   },
-  accountTextContainer: {
-    marginLeft: 100,
-    marginTop: 10
+  buttonText: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: '700',
   },
-  logInButtonContainer: {
-    marginHorizontal: 100,
-    marginTop: 20
+  textContainer: {
+    marginVertical: 10,
+  },
+  text: {
+    fontSize: 20,
+    fontWeight: '700',
+    textAlign: 'center',
   },
 });
 

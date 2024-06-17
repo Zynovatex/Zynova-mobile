@@ -10,7 +10,7 @@ interface Props {
 const Detail: React.FC<Props> = (props) => {
 const gotop = () => {
   console.log(totalPrice)
-    props.navigation.navigate('G', { totalPrice: totalPrice });
+    props.navigation.navigate('K', { totalPrice: totalPrice });
 };
 
 

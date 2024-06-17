@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, Image, Platform } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, Image, Platform, StyleSheet } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'; // Import KeyboardAwareScrollView
 import { NavigationProp } from '@react-navigation/native';
@@ -25,8 +25,9 @@ const Dashboard: React.FC<Props> = (props) => {
         { name: 'Banana', image: require('../../assets/img/banana.jpg') },
         { name: 'mango', image: require('../../assets/img/mango.jpg') },
         { name: 'rambutan', image: require('../../assets/img/rambutan.jpg') },
+        
         // Add more fruits as needed
-    ]
+    ];
 
     // Function to render fruits in two columns
     const renderFruitsInColumns = () => {
@@ -53,7 +54,7 @@ const Dashboard: React.FC<Props> = (props) => {
 
     return (
         <KeyboardAwareScrollView // Use KeyboardAwareScrollView here
-            style={{ flex: 1 }}
+            style={styles.container}
             enableOnAndroid={true}
             extraHeight={Platform.select({ android: 130, ios: 0 })} // Adjust this value according to your layout
             contentContainerStyle={{ flexGrow: 1 }}
@@ -122,5 +123,12 @@ const Dashboard: React.FC<Props> = (props) => {
         </KeyboardAwareScrollView>
     );
 };
+
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        backgroundColor: 'white', // Set background color to white
+    },
+});
 
 export default Dashboard;

@@ -12,6 +12,8 @@ import Dashboard from './src/screens/Dashboard';
 import Detail from './src/screens/Detail';
 import Payment from './src/screens/Payment';
 import Orders from './src/screens/Orders';
+import Profile from './src/screens/Profile';
+
 function App() {
   return (
     
@@ -26,6 +28,8 @@ function App() {
     {/* <Detail/> */}
      {/* <Payment/> */}
     {/* <Orders/> */}
+    {/* <Profile/> */}
+    
 
   </View>
 

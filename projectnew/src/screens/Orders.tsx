@@ -1,31 +1,45 @@
-import { StyleSheet, Text, View,Button} from 'react-native'
-import React from 'react'
+import { NavigationProp } from '@react-navigation/native';
+import React from 'react';
+import { StyleSheet, Text, View, Button } from 'react-native';
 
-const Orders = () => {
-  return (
-    <View>
-      <View>
-       <Text style={{
-        fontSize:40,
-        marginTop:50,
-        fontWeight:"700",
-        color:'green'
-        
-       }}>Selected Items</Text>
-      </View>
-      <View style={{
-        marginTop:600,
-        width:200,
-        marginHorizontal:90
-
-      }}>
-        <Button title='Order Now' />
-      </View>
-
-    </View>
-  )
+interface Props {
+  navigation: NavigationProp<any>;
 }
 
-export default Orders
+const Orders: React.FC<Props> = (props: Props) => {
+  const gotolg = () => {
+    const totalPrice = 0; // Declare and initialize the totalPrice variable
+    props.navigation.navigate('G', { totalPrice: totalPrice });
+  };
 
-const styles = StyleSheet.create({})
+  return (
+    <View style={styles.container}>
+      <View>
+        <Text style={styles.title}>Selected Items</Text>
+      </View>
+      <View style={styles.buttonContainer}>
+        <Button title='Order Now' onPress={gotolg} />
+      </View>
+    </View>
+  );
+}
+
+export default Orders;
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: 'white', // Set the background color to white
+  },
+  title: {
+    fontSize: 40,
+    marginTop: 50,
+    fontWeight: "700",
+    color: 'green'
+  },
+  buttonContainer: {
+    marginTop: 600,
+    width: 200,
+    marginHorizontal: 90
+  }
+});

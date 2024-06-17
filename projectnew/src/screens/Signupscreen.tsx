@@ -3,9 +3,11 @@ import { StyleSheet, Text, View, Image, Button, TextInput } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { Formik, FormikHelpers } from 'formik';
 import * as Yup from 'yup';
+import Icon from 'react-native-vector-icons/FontAwesome';
+import axios from 'axios';
 
 interface Props {
-  navigation: any; // Replace 'any' with actual type for navigation
+  navigation: any; // Replace 'any' with the appropriate type for navigation if available
 }
 
 interface FormValues {
@@ -34,11 +36,21 @@ const Signupscreen: React.FC<Props> = ({ navigation }) => {
       .required('Confirm Password is required'),
   });
 
-  const handleSubmit = (values: FormValues, { setSubmitting }: FormikHelpers<FormValues>) => {
-    console.log(values); // You can perform form submission here
-    // Redirect to another screen
-    stack.navigate('E');
-    setSubmitting(false);
+  const handleSubmit = async (values: FormValues, { setSubmitting }: FormikHelpers<FormValues>) => {
+    try {
+      const response = await axios.post('http://192.168.17.125:8080/api/user/signup', {
+        name: values.name,
+        email: values.email,
+        password: values.password,
+      });
+
+      console.log(response.data); 
+      stack.navigate('E');
+    } catch (error) {
+      console.error(error); 
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   return (
@@ -56,6 +68,7 @@ const Signupscreen: React.FC<Props> = ({ navigation }) => {
           {({ handleChange, handleBlur, handleSubmit, values, errors, touched }) => (
             <View style={styles.formContainer}>
               <View style={styles.inputContainer}>
+                <Icon name="user" size={20} color="#666" style={styles.icon} />
                 <TextInput
                   style={styles.input}
                   placeholderTextColor="#666"
@@ -64,10 +77,11 @@ const Signupscreen: React.FC<Props> = ({ navigation }) => {
                   onBlur={handleBlur('name')}
                   value={values.name}
                 />
-                {errors.name && touched.name && <Text style={styles.errorText}>{errors.name}</Text>}
               </View>
+              {errors.name && touched.name && <Text style={styles.errorText}>{errors.name}</Text>}
 
               <View style={styles.inputContainer}>
+                <Icon name="envelope" size={20} color="#666" style={styles.icon} />
                 <TextInput
                   style={styles.input}
                   placeholderTextColor="#666"
@@ -76,10 +90,11 @@ const Signupscreen: React.FC<Props> = ({ navigation }) => {
                   onBlur={handleBlur('email')}
                   value={values.email}
                 />
-                {errors.email && touched.email && <Text style={styles.errorText}>{errors.email}</Text>}
               </View>
+              {errors.email && touched.email && <Text style={styles.errorText}>{errors.email}</Text>}
 
               <View style={styles.inputContainer}>
+                <Icon name="lock" size={20} color="#666" style={styles.icon} />
                 <TextInput
                   style={styles.input}
                   placeholderTextColor="#666"
@@ -89,10 +104,11 @@ const Signupscreen: React.FC<Props> = ({ navigation }) => {
                   value={values.password}
                   secureTextEntry
                 />
-                {errors.password && touched.password && <Text style={styles.errorText}>{errors.password}</Text>}
               </View>
+              {errors.password && touched.password && <Text style={styles.errorText}>{errors.password}</Text>}
 
               <View style={styles.inputContainer}>
+                <Icon name="lock" size={20} color="#666" style={styles.icon} />
                 <TextInput
                   style={styles.input}
                   placeholderTextColor="#666"
@@ -102,13 +118,13 @@ const Signupscreen: React.FC<Props> = ({ navigation }) => {
                   value={values.confirmPassword}
                   secureTextEntry
                 />
-                {errors.confirmPassword && touched.confirmPassword && (
-                  <Text style={styles.errorText}>{errors.confirmPassword}</Text>
-                )}
               </View>
+              {errors.confirmPassword && touched.confirmPassword && (
+                <Text style={styles.errorText}>{errors.confirmPassword}</Text>
+              )}
 
               <View style={styles.buttonContainer}>
-                <Button title="Sign Up" onPress={()=>handleSubmit()} />
+                <Button title="Sign Up" onPress={handleSubmit as any} />
               </View>
             </View>
           )}
@@ -138,8 +154,9 @@ const styles = StyleSheet.create({
   },
   inputContainer: {
     height: 50,
-    marginTop: 20,
-    justifyContent: 'center',
+    marginTop: 25,
+    flexDirection: 'row',
+    alignItems: 'center',
     borderRadius: 20,
     marginHorizontal: 40,
     paddingLeft: 20,
@@ -152,16 +169,19 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     paddingLeft: 5,
     borderColor: 'grey',
-    width:300
+    width: 260, // Adjusted width
+  },
+  icon: {
+    marginRight: 10,
   },
   buttonContainer: {
     marginHorizontal: 100,
     marginTop: 50,
-    width:300
+    width: 300,
   },
   errorText: {
     color: 'red',
-    fontSize: 16,
+    fontSize: 12,
     marginLeft: 20,
     marginTop: 5,
   },
