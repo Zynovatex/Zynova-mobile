@@ -24,6 +24,7 @@ const validationSchema = yup.object().shape({
 
 const Loginscreen: React.FC<Props> = ({ navigation }) => {
   const handleSubmit = async (values: FormValues) => {
+    console.log('Form values', values);
     try {
       const response = await axios.post('http://192.168.17.125:8080/api/user/signin', {
         email: values.email,

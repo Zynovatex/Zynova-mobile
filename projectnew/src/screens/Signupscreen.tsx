@@ -37,6 +37,7 @@ const Signupscreen: React.FC<Props> = ({ navigation }) => {
   });
 
   const handleSubmit = async (values: FormValues, { setSubmitting }: FormikHelpers<FormValues>) => {
+    console.log('Form values', values);
     try {
       const response = await axios.post('http://192.168.17.125:8080/api/user/signup', {
         name: values.name,
