@@ -11,6 +11,11 @@ import Detail from '../src/screens/Detail';
 import Payment from '../src/screens/Payment';
 import Bottomtabnavigation from './Bottomtabnavigation';
 import Orders from '../src/screens/Orders';
+import EnterEmailScreen from '../src/screens/EnterEmailScreen'
+import EnterOTPScreen from '../src/screens/EnterOTPScreen';
+import ResetPasswordScreen from '../src/screens/ResetPasswordScreen';
+
+
 
 const Stack = createStackNavigator();
 
@@ -20,7 +25,7 @@ const Appnavigation = () => {
  <Stack.Navigator screenOptions={{
     headerShown:false,
  }
- }>
+ }>   
       <Stack.Screen name="A" component={Popupscreen} options={{
         cardStyleInterpolator:CardStyleInterpolators.forFadeFromCenter
       }}/>
@@ -28,6 +33,9 @@ const Appnavigation = () => {
         cardStyleInterpolator:CardStyleInterpolators.forFadeFromCenter
       }}/>
       <Stack.Screen name="C" component={Loginscreen}/>
+      <Stack.Screen name='I' component={EnterEmailScreen}/>
+      <Stack.Screen name='J' component={EnterOTPScreen}/>
+      <Stack.Screen name='L' component={ResetPasswordScreen}/>
       <Stack.Screen name='D' component={Signupscreen} />
      <Stack.Screen name='E' component={Dashboard}/>
      <Stack.Screen name='F' component={Detail}/>

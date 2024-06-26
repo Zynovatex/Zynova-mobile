@@ -13,6 +13,9 @@ import Detail from './src/screens/Detail';
 import Payment from './src/screens/Payment';
 import Orders from './src/screens/Orders';
 import Profile from './src/screens/Profile';
+import EnterEmailScreen from './src/screens/EnterEmailScreen';
+import EnterOTPScreen from './src/screens/EnterOTPScreen';
+import ResetPasswordScreen from './src/screens/ResetPasswordScreen';
 
 function App() {
   return (
@@ -29,7 +32,9 @@ function App() {
      {/* <Payment/> */}
     {/* <Orders/> */}
     {/* <Profile/> */}
-    
+    {/* {<EnterEmailScreen>} */}
+   {/* {<EnterOTPScreen>} */}
+   {/* {<ResetPasswordScreen>} */}
 
   </View>
 

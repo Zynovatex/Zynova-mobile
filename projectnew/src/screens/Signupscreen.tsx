@@ -1,5 +1,5 @@
-import React from 'react';
-import { StyleSheet, Text, View, Image, Button, TextInput } from 'react-native';
+import React, { useState } from 'react';
+import { StyleSheet, Text, View, Image, Button, TextInput, TouchableOpacity } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { Formik, FormikHelpers } from 'formik';
 import * as Yup from 'yup';
@@ -15,6 +15,7 @@ interface FormValues {
   email: string;
   password: string;
   confirmPassword: string;
+  warehouse: string; // Added warehouse field
 }
 
 const Signupscreen: React.FC<Props> = ({ navigation }) => {
@@ -25,6 +26,7 @@ const Signupscreen: React.FC<Props> = ({ navigation }) => {
     email: '',
     password: '',
     confirmPassword: '',
+    warehouse: '', // Initial value for warehouse
   };
 
   const validationSchema = Yup.object().shape({
@@ -34,6 +36,7 @@ const Signupscreen: React.FC<Props> = ({ navigation }) => {
     confirmPassword: Yup.string()
       .oneOf([Yup.ref('password'), null], 'Passwords must match')
       .required('Confirm Password is required'),
+    warehouse: Yup.string().required('Warehouse is required'), // Validation for warehouse
   });
 
   const handleSubmit = async (values: FormValues, { setSubmitting }: FormikHelpers<FormValues>) => {
@@ -43,15 +46,27 @@ const Signupscreen: React.FC<Props> = ({ navigation }) => {
         name: values.name,
         email: values.email,
         password: values.password,
+        warehouse: values.warehouse, // Include warehouse in the request
       });
 
-      console.log(response.data); 
+      console.log(response.data);
       stack.navigate('E');
     } catch (error) {
-      console.error(error); 
+      console.error(error);
     } finally {
       setSubmitting(false);
     }
+  };
+
+  const [passwordVisible, setPasswordVisible] = useState(false);
+  const [confirmPasswordVisible, setConfirmPasswordVisible] = useState(false);
+
+  const togglePasswordVisibility = () => {
+    setPasswordVisible(!passwordVisible);
+  };
+
+  const toggleConfirmPasswordVisibility = () => {
+    setConfirmPasswordVisible(!confirmPasswordVisible);
   };
 
   return (
@@ -103,8 +118,11 @@ const Signupscreen: React.FC<Props> = ({ navigation }) => {
                   onChangeText={handleChange('password')}
                   onBlur={handleBlur('password')}
                   value={values.password}
-                  secureTextEntry
+                  secureTextEntry={!passwordVisible}
                 />
+                <TouchableOpacity onPress={togglePasswordVisibility}>
+                  <Icon name={passwordVisible ? 'eye' : 'eye-slash'} size={20} color="#666" style={styles.icon} />
+                </TouchableOpacity>
               </View>
               {errors.password && touched.password && <Text style={styles.errorText}>{errors.password}</Text>}
 
@@ -117,12 +135,31 @@ const Signupscreen: React.FC<Props> = ({ navigation }) => {
                   onChangeText={handleChange('confirmPassword')}
                   onBlur={handleBlur('confirmPassword')}
                   value={values.confirmPassword}
-                  secureTextEntry
+                  secureTextEntry={!confirmPasswordVisible}
                 />
+                <TouchableOpacity onPress={toggleConfirmPasswordVisibility}>
+                  <Icon name={confirmPasswordVisible ? 'eye' : 'eye-slash'} size={20} color="#666" style={styles.icon} />
+                </TouchableOpacity>
               </View>
               {errors.confirmPassword && touched.confirmPassword && (
                 <Text style={styles.errorText}>{errors.confirmPassword}</Text>
               )}
+
+              <View style={styles.inputContainer}>
+                <Icon name="home" size={20} color="#666" style={styles.icon} />
+                <TextInput
+                  style={styles.input}
+                  placeholderTextColor="#666"
+                  placeholder="Warehouse"
+                  onChangeText={handleChange('warehouse')}
+                  onBlur={handleBlur('warehouse')}
+                  value={values.warehouse}
+                />
+              </View>
+              {errors.warehouse && touched.warehouse && <Text style={styles.errorText}>{errors.warehouse}</Text>}
+              <Text style={styles.guidanceText}>
+                Please select the warehouse closest to your location.
+              </Text>
 
               <View style={styles.buttonContainer}>
                 <Button title="Sign Up" onPress={handleSubmit as any} />
@@ -161,16 +198,17 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     marginHorizontal: 40,
     paddingLeft: 20,
+    paddingRight: 10, // Added paddingRight to ensure proper spacing for the icon
     backgroundColor: 'rgba(255,255,255,0.8)',
   },
   input: {
+    flex: 1, // Flex to take remaining space
     fontSize: 15,
     backgroundColor: 'transparent',
     height: 50,
     borderRadius: 10,
-    paddingLeft: 5,
+    paddingLeft: 10, // Adjusted padding to align text properly
     borderColor: 'grey',
-    width: 260, // Adjusted width
   },
   icon: {
     marginRight: 10,
@@ -185,5 +223,12 @@ const styles = StyleSheet.create({
     fontSize: 12,
     marginLeft: 20,
     marginTop: 5,
+  },
+  guidanceText: {
+    marginTop: 10,
+    color: 'black',
+    fontSize: 12,
+    textAlign: 'center',
+    fontWeight: '500',
   },
 });

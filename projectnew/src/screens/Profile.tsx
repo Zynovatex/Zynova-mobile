@@ -10,7 +10,7 @@ const Profile: React.FC = () => {
         </Text>
       </View>
       <View>
-        <TextInput style={styles.input} placeholder="User name" />
+        <TextInput style={styles.input} placeholder="Name" />
       </View>
       <View>
         <TextInput style={styles.input} placeholder="Email" />
@@ -19,8 +19,9 @@ const Profile: React.FC = () => {
         <TextInput style={styles.input} placeholder="Address" />
       </View>
       <View>
-        <TextInput style={styles.input} placeholder="Phonenumber" />
+        <TextInput style={styles.input} placeholder="District" />
       </View>
+      
       <View style={styles.buttonContainer}>
         <Button title='Update Profile' />
       </View>
@@ -38,7 +39,7 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     marginTop: 50,
     color: 'green',
-    padding: 1,
+    padding: 7,
   },
   input: {
     borderWidth: 3,

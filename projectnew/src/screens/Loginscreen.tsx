@@ -1,9 +1,9 @@
-import React from 'react';
-import { StyleSheet, Text, View, Image, TextInput, Button, Alert } from 'react-native';
+import React, { useState } from 'react';
+import { StyleSheet, Text, View, Image, TextInput, Button, Alert, TouchableOpacity } from 'react-native';
 import { Formik, FormikProps } from 'formik';
 import * as yup from 'yup';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import Icon from 'react-native-vector-icons/MaterialIcons'; // or any other icon library
+import Icon from 'react-native-vector-icons/MaterialIcons';
 import axios from 'axios';
 
 interface FormValues {
@@ -23,6 +23,8 @@ const validationSchema = yup.object().shape({
 });
 
 const Loginscreen: React.FC<Props> = ({ navigation }) => {
+  const [passwordVisible, setPasswordVisible] = useState(false);
+
   const handleSubmit = async (values: FormValues) => {
     console.log('Form values', values);
     try {
@@ -38,10 +40,8 @@ const Loginscreen: React.FC<Props> = ({ navigation }) => {
     } catch (error) {
       if (axios.isAxiosError(error) && error.response) {
         console.error(error); // Display error message
-        // Display error message
         Alert.alert('Login Failed', error.response.data.message || 'An error occurred');
       } else {
-        // Handle other errors
         Alert.alert('Login Failed', 'An error occurred');
       }
     }
@@ -81,14 +81,20 @@ const Loginscreen: React.FC<Props> = ({ navigation }) => {
                     onChangeText={handleChange('password')}
                     onBlur={handleBlur('password')}
                     value={values.password}
-                    secureTextEntry
+                    secureTextEntry={!passwordVisible}
                   />
+                  <TouchableOpacity onPress={() => setPasswordVisible(!passwordVisible)}>
+                    <Icon name={passwordVisible ? "visibility" : "visibility-off"} size={20} color="grey" style={styles.icon} />
+                  </TouchableOpacity>
                 </View>
                 {touched.password && errors.password && <Text style={styles.errorText}>{errors.password}</Text>}
               </View>
               <View style={styles.buttonContainer}>
                 <Button onPress={() => handleSubmit()} title='Log In' />
               </View>
+              <TouchableOpacity style={styles.forgotPasswordContainer} onPress={() => navigation.navigate('I')}>
+                <Text style={styles.forgotPasswordText}>Forgot Password?</Text>
+              </TouchableOpacity>
             </View>
           )}
         </Formik>
@@ -123,14 +129,14 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 15,
     backgroundColor: 'white',
+    paddingHorizontal: 10,
   },
   icon: {
-    marginLeft: 10,
+    marginRight: 10,
   },
   input: {
     flex: 1,
     height: 50,
-    paddingLeft: 10,
   },
   errorText: {
     color: 'red',
@@ -139,6 +145,15 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     marginTop: 20,
+  },
+  forgotPasswordContainer: {
+    marginTop: 20,
+    alignItems: 'center',
+  },
+  forgotPasswordText: {
+    color: 'black',
+    fontWeight: '500',
+    textDecorationLine: 'underline',
   },
 });
 

@@ -16,6 +16,7 @@ interface Item {
 const Dashboard: React.FC<Props> = (props) => {
     const gotodet = () => {
         props.navigation.navigate('F');
+        
     };
 
     const [searchText, setSearchText] = useState<string>('');
